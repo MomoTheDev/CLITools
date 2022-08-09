@@ -1,76 +1,110 @@
 package me.mohammad.clitools;
 
+import java.awt.Color;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 
 public class CLITools {
 	
-	private boolean logErrors;
-	
-	private List<String> titles;
-	private Map<String, List<Integer>> lastReturnCodes;
-	private Map<String, Map<String, Consumer<String>>> listeners;
-	
-	public CLITools(final boolean logErrors) {
-		this.logErrors = logErrors;
-		initialize();
-	}
-	
-	private void initialize() {
-		titles = new ArrayList<>();
-		listeners = new HashMap<>();
-		listeners.put("title_set", new HashMap<>());
-		listeners.put("console_clear", new HashMap<>());
-		lastReturnCodes = new HashMap<>();
-		lastReturnCodes.put("title_set", new ArrayList<>());
-		lastReturnCodes.put("console_clear", new ArrayList<>());
-	}
-	
-	public void addListener(final String action, final String key, final Consumer<String> listener) {
-		listeners.get(action).put(key, listener);
-	}
-	
-	public void removeListener(final String action, final String key) {
-		listeners.get(action).remove(key);
-	}
-	
-	public List<String> getTitles() {
-		return titles;
-	}
-	
-	public Map<String, List<Integer>> getReturnCodes() {
-		return lastReturnCodes;
-	}
-	
     public boolean setTitle(final String title) {
     	try {
-    		lastReturnCodes.get("title_set").add(new ProcessBuilder(String.format(DefaultValues.STRING_CURRENT_SET_TITLE, title.replaceAll("\"", "")).split(" ")).inheritIO().start().waitFor());
+    		new ProcessBuilder(String.format(DefaultValues.STRING_CURRENT_SET_TITLE, title.replaceAll("\"", "")).split(" ")).inheritIO().start().waitFor();
 			System.out.flush();
-			titles.add(title);
-			listeners.get("title_set").forEach((key, listener) -> listener.accept(title));
 			return true;
 		} catch (InterruptedException | IOException e) {
-			if (logErrors)
-				e.printStackTrace();
-			return false;
+			throw new CLIException("Unable to change console title: " + e.getLocalizedMessage());
 		}
     }
     
-    public boolean clearConsole() {
+    public boolean clear() {
     	try {
-    		lastReturnCodes.get("console_clear").add(new ProcessBuilder(DefaultValues.CURRENT_CLEAR_SCREEN).inheritIO().start().waitFor());
+    		new ProcessBuilder(DefaultValues.CURRENT_CLEAR_SCREEN).inheritIO().start().waitFor();
 			System.out.flush();
-			listeners.get("console_clear").forEach((key, listener) -> listener.accept(key));
 			return true;
 		} catch (InterruptedException | IOException e) {
-			if (logErrors)
-				e.printStackTrace();
-			return false;
+			throw new CLIException("Unable to clear console: " + e.getLocalizedMessage());
 		}
     }
+    
+    public void blink() {
+		System.out.print("\033[5m");
+	}
+	
+	public void bold() {
+		System.out.print("\033[1m");
+	}
+	
+	public void italic() {
+		System.out.print("\033[3m");
+	}
+	
+	public void mark() {
+		System.out.print("\033[21m");
+	}
+	
+	public void reset() {
+		System.out.print(CLIColors.getColor("RESET"));
+	}
+	
+	public void reverse() {
+		System.out.print("\033[7m");
+	}
+	
+	public void strikethrough() {
+		System.out.print("\033[9m");
+	}
+	
+	public void underline() {
+		System.out.print("\033[4m");
+	}
+	
+	public void upperline() {
+		System.out.print("\033[53m");
+	}
+	
+	public void setColor(final String color) {
+		System.out.print(CLIColors.getColor(color));
+	}
+	
+	public void setColorRGB(int red, int green, int blue) {
+		if (red > 255)
+			red = 255;
+		if (green > 255)
+			green = 255;
+		if (blue > 255)
+			blue = 255;
+		System.out.print(String.format("\033[38;2;%d;%d;0m", red, green, blue));
+	}
+	
+	public void setColorHEX(final String hex) {
+		try {
+			final Color color = Color.decode(hex);
+			System.out.printf("\033[38;2;%d;%d;0m", color.getRed(), color.getGreen(), color.getBlue());
+		} catch (NumberFormatException e) {
+			throw new CLIException("Unable to decode HEX color code: " + e.getLocalizedMessage());
+		}
+	}
+	
+	public void setBackground(final String color) {
+		System.out.print(CLIColors.getBackground(color.startsWith("BG_") ? color : ("BG_" + color)));
+	}
+	
+	public void setBackgroundRGB(int red, int green, int blue) {
+		if (red > 255)
+			red = 255;
+		if (green > 255)
+			green = 255;
+		if (blue > 255)
+			blue = 255;
+		System.out.print(String.format("\033[48;2;%d;%d;0m", red, green, blue));
+	}
+	
+	public void setBackgroundHEX(final String hex) {
+		try {
+			final Color color = Color.decode(hex);
+			System.out.printf("\033[48;2;%d;%d;0m", color.getRed(), color.getGreen(), color.getBlue());
+		} catch (NumberFormatException e) {
+			throw new CLIException("Unable to decode HEX color code: " + e.getLocalizedMessage());
+		}
+	}
     
 }
