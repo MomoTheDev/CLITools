@@ -4,34 +4,100 @@ A Command-Line tooling library for Java
 This is a tooling library to manage your command line interface (CLI).
 
 # Example
-In order to create an Instance of the CLITools class, you'd have to use the default constructor `CLITools(logErrors: boolean)`
+In order to create an Instance of the CLITools class, you'd have to use the default constructor `CLITools()`
 ```java
-final CLITools cliTools = new CLITools(true);
+final CLITools cliTools = new CLITools();
 ```
 ---
-You can clear the console using the `clearConsole()` method
+You can clear the console using the `clear()` method
 ```java
-cliTools.clearConsole();
+cliTools.clear();
 ```
 ---
 You can also change the current terminals title using the `setTitle(String)` method
 ```java
 cliTools.setTitle("This is the new console title");
 ```
+###
+# Customizing
+You can easily customize your terminal using the methods in the `CLITools` class.
+
+```java
+cliTools.blink();
+```
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/blink.gif)
 ---
-There's also a minimalistic event-listening system, you can listen to the `title_set` or the `console_clear` event
-
-Here's an example to add a new listener
 ```java
-cliTools.addListener("title_set", "listener1", (newTitle) -> {
-    System.out.printf("Title has been changed to %s\n", newTitle);
-});
+cliTools.bold();
 ```
-
-And here's an example to remove an existing listener
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/bold.png)
+---
 ```java
-cliTools.removeListener("title_set", "listener1");
+cliTools.italic();
 ```
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/italic.png)
+---
+```java
+cliTools.mark();
+```
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/marked.png)
+---
+```java
+cliTools.reverse();
+```
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/reverse.png)
+---
+```java
+cliTools.strikethrough();
+```
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/strikethrough.png)
+---
+```java
+cliTools.underline();
+```
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/underlined.png)
+---
+```java
+cliTools.upperline();
+```
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/upperlined.png)
+---
+```java
+cliTools.setColor("BRIGHT_BLUE");
+```
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/colored.png)
+---
+```java
+cliTools.setColorHEX("#54BAB9");
+```
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/colored_hex.png)
+---
+```java
+cliTools.setColorRGB(84, 186, 185);
+```
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/colored_rgb.png)
+---
+```java
+cliTools.setBackground("BRIGHT_BLUE");
+```
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/background.png)
+---
+```java
+cliTools.setBackgroundHEX("#54BAB9");
+```
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/background_hex.png)
+---
+```java
+cliTools.setBackgroundRGB(84, 186, 185);
+```
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/background_rgb.png)
+---
+You can always reset your customization using the `reset()` method
+```java
+cliTools.reset();
+```
+![Result](https://github.com/MomoTheDev/CLITools/tree/main/screenshots/reset.png)
+###
 
 # Updating
 The current support for this library is for Windows and Linux (tested on Windows 11). MacOS might be supported in the future!
