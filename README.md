@@ -35,7 +35,7 @@ cliTools.bold();
 ```java
 cliTools.italic();
 ```
-![Result](https://raw.githubusercontent.com/MomoTheDev/CLITools/tree/main/screenshots/italic.png?raw=true)
+![Result](https://raw.githubusercontent.com/MomoTheDev/CLITools/tree/main/screenshots/italic.png)
 ---
 ```java
 cliTools.mark();
